@@ -129,9 +129,9 @@ def index():
 
             try:
                 allcoursesURL = allCourses[0].div
-                app.logger.info(allcoursesURL)
+                # app.logger.info(allcoursesURL)
                 href = allcoursesURL.find_all('a')
-                app.logger.info(href)
+                # app.logger.info(href)
             except:
                 # app.logger.info(allcoursesURL)
                 # app.logger.info(href)
