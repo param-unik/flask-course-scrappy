@@ -107,6 +107,7 @@ def index():
                 courseName = allCourses[0].find_all('p', {'class' : 'TopCategory_listname__BgEnP'})[0].text
                 app.logger.info(courseName)
             except:
+                app.logger.info(courseName)
                 app.logger.error('Error getting course Name from paragraph')
 
             try:
@@ -115,6 +116,8 @@ def index():
                 href = allcoursesURL.find_all('a')
                 app.logger.info(href)
             except:
+                app.logger.info(allcoursesURL)
+                app.logger.info(href)
                 app.logger.error('Error getting courses from ancher tag')
 
             # defining empty list    
