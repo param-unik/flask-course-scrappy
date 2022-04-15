@@ -86,6 +86,7 @@ def index():
             try:  
                 courseExplorer = iNeuron_html.findAll("div", {"class": "left-area"})
                 coursesURL = courseExplorer[0].a['href']
+                app.logger.info(coursesURL)
             except:
                 app.loger.error("Error finding class or href of course URL")   
 
@@ -95,18 +96,22 @@ def index():
                 # scrape data
                 driver.get(coursesURL)
                 soup = bs(driver.page_source, 'html.parser')
+                app.logger.info('soup')
+                app.logger.info(soup)
             except:
                 app.logger.error('Not able to parse dynamic page')
 
             try:    
                 allCourses = soup.find_all('div', {'class': "TopCategoryList_categories__1oxks"})
+                app.logger.info('All Courses')
+                app.logger.info(allCourses)
             except:
                 app.logger.error('Not able to locate div for course categories List')
             
             try:
                 courseName = allCourses[0].find_all('p', {'class' : 'TopCategory_listname__BgEnP'})[0].text
             except:
-                app.logger.info(allCourses[0])
+                app.logger.info(allCourses)
                 app.logger.error('Error getting course Name from paragraph')
 
             try:
