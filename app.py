@@ -56,9 +56,9 @@ def index():
                 driver = webdriver.Chrome(executable_path=r'C:\Users\Param\Downloads\ImageScrapper\ImageScrapper\chromedriver.exe', chrome_options=chrome_options)
             else:
                 app.logger.info('Prod environment is activated')
-                chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-                chrome_options.add_argument("--disable-dev-shm-usage")
-                chrome_options.add_argument("--no-sandbox")
+                # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+                # chrome_options.add_argument("--disable-dev-shm-usage")
+                # chrome_options.add_argument("--no-sandbox")
                 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
                 
             # base URL on which web scrape needs to be performed..
@@ -105,12 +105,15 @@ def index():
             
             try:
                 courseName = allCourses[0].find_all('p', {'class' : 'TopCategory_listname__BgEnP'})[0].text
+                app.logger.info(courseName)
             except:
                 app.logger.error('Error getting course Name from paragraph')
 
             try:
                 allcoursesURL = allCourses[0].div
+                app.logger.info(allcoursesURL)
                 href = allcoursesURL.find_all('a')
+                app.logger.info(href)
             except:
                 app.logger.error('Error getting courses from ancher tag')
 
