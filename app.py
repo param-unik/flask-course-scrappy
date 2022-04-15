@@ -178,6 +178,7 @@ def index():
             # if all good then results.html will get render and show to the users.    
             return render_template('results.html', courselist=courselist[0:(len(courselist) - 1)])
         except Exception as e:
+            app.logger.error(e)
             app.logger.error('Exception happened here..')
             return 'something is wrong'
     else:
