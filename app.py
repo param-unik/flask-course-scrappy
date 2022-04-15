@@ -108,7 +108,7 @@ def index():
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 
                 # process will go for sleep for 15 minutes
-                time.sleep(15)
+                time.sleep(5)
 
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
