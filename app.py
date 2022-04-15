@@ -95,9 +95,14 @@ def index():
                 # since iNeuron has dynamic course website built in react so we need selenium driver to
                 # scrape data
                 driver.get(coursesURL)
+                # to scroll from 0 to end of page
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                
+                # process will go for sleep for 15 minutes
+                time.sleep(15)
+                
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
-                # app.logger.info(soup)
             except:
                 app.logger.error('Not able to parse dynamic page')
 
