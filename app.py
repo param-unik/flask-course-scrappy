@@ -97,7 +97,7 @@ def index():
                 driver.get(coursesURL)
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
-                app.logger.info(soup)
+                # app.logger.info(soup)
             except:
                 app.logger.error('Not able to parse dynamic page')
 
