@@ -12,7 +12,7 @@ import pymongo
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 
 @app.route('/', methods=['GET'])  # route to display the home page
 @cross_origin()
