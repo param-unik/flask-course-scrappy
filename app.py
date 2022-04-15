@@ -1,7 +1,7 @@
 import os
 import time
 from datetime import timedelta
-from flask import Flask, render_template, request,jsonify, session
+from flask import Flask, render_template, request,jsonify
 from flask_cors import CORS,cross_origin
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
@@ -14,14 +14,6 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
-
-@app.before_request
-def make_session_permanent():
-    app.secret_key = 'super secret key'
-    app.config['SESSION_TYPE'] = 'filesystem'
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=5)
-
 
 @app.route('/', methods=['GET'])  # route to display the home page
 @cross_origin()
