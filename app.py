@@ -12,7 +12,7 @@ import pymongo
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/', methods=['GET'])  # route to display the home page
 @cross_origin()
@@ -45,7 +45,8 @@ def index():
     if request.method == 'POST':
         try:
             # below are chrome options for selenium
-            load_dotenv() 
+            load_dotenv()
+            app.logger.info(os.environ.get('ENV')) 
             chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument('--headless')
 
@@ -74,20 +75,19 @@ def index():
                 iNeuronHomePage = uClient.read()
                 uClient.close()
             except:
-                app.logger.info("Error in establishing request with iNeuron")
+                app.logger.error("Error in establishing request with iNeuron")
 
             try:
                 # it will help us to parse HTML related stuff 
                 iNeuron_html = bs(iNeuronHomePage, "html.parser")
             except:
-                app.logger.info("Not able to parse web page.") 
+                app.logger.error("Not able to parse web page.") 
 
             try:  
                 courseExplorer = iNeuron_html.findAll("div", {"class": "left-area"})
                 coursesURL = courseExplorer[0].a['href']
             except:
-                app.loger.info("Error finding class or href of course URL")   
-
+                app.loger.error("Error finding class or href of course URL")   
 
             app.logger.info("Dynamic scraping starts here")
             try:
@@ -96,23 +96,23 @@ def index():
                 driver.get(coursesURL)
                 soup = bs(driver.page_source, 'html.parser')
             except:
-                app.logger.info('Not able to parse dynamic page')
+                app.logger.error('Not able to parse dynamic page')
 
             try:    
                 allCourses = soup.find_all('div', {'class': "TopCategoryList_categories__1oxks"})
             except:
-                app.logger.info('Not able to locate div for course categories List')
+                app.logger.error('Not able to locate div for course categories List')
             
             try:
                 courseName = allCourses[0].find_all('p', {'class' : 'TopCategory_listname__BgEnP'})[0].text
             except:
-                app.logger.info('Error getting course Name from paragraph')
+                app.logger.error('Error getting course Name from paragraph')
 
             try:
                 allcoursesURL = allCourses[0].div
                 href = allcoursesURL.find_all('a')
             except:
-                app.logger.info('error getting courses from ancher tag')
+                app.logger.error('Error getting courses from ancher tag')
 
             # defining empty list    
             courselist =[]
@@ -128,7 +128,7 @@ def index():
                 try:
                     driver.get(new_cat_url)
                 except:
-                    app.logger.info('error getting URL extracted from anchor tag')
+                    app.logger.error('error getting URL extracted from anchor tag')
 
                 # to scroll from 0 to end of page
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -140,12 +140,12 @@ def index():
                     course_page = bs(driver.page_source, 'html.parser')
                     all_course_list = course_page.find_all('div', {'class': 'AllCourses_course-list__36-kz'})
                 except:
-                    app.logger.info('Error getting courses from individual section')
+                    app.logger.error('Error getting courses from individual section')
 
                 try:    
                     course_list  = all_course_list[0].div.div.find_all('div', {'class': 'Course_course-card__1_V8S Course_card__2uWBu card'})
                 except:
-                    app.logger.info('Error extracting div which has details of each of the courses section wise')
+                    app.logger.error('Error extracting div which has details of each of the courses section wise')
 
                 app.logger.info(len(course_list))
 
@@ -172,7 +172,7 @@ def index():
             # if all good then results.html will get render and show to the users.    
             return render_template('results.html', courselist=courselist[0:(len(courselist) - 1)])
         except Exception as e:
-            app.logger.info('Exception happened here..')
+            app.logger.error('Exception happened here..')
             return 'something is wrong'
     else:
         return render_template('index.html')
