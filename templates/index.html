@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Search Page</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">Click to get All Courses</h1>
+
+    <div class="form">
+        <form action="/courses" method="POST">
+            <input type="submit" value="All Courses">
+        </form>
+    </div>
+</div>
+{% endblock %}
