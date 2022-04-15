@@ -17,10 +17,12 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.before_request
 def make_session_permanent():
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
 
-    
+
 @app.route('/', methods=['GET'])  # route to display the home page
 @cross_origin()
 def homePage():
@@ -201,7 +203,5 @@ def index():
 
 
 if __name__ == "__main__":
-    app.secret_key = 'super secret key'
-    app.config['SESSION_TYPE'] = 'filesystem'
     app.run(host='127.0.0.1', port=8001, debug=True)
 
