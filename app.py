@@ -1,6 +1,7 @@
 import os
 import time
-from flask import Flask, render_template, request,jsonify
+from datetime import timedelta
+from flask import Flask, render_template, request,jsonify, session
 from flask_cors import CORS,cross_origin
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
@@ -13,6 +14,11 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(minutes=5)
 
 @app.route('/', methods=['GET'])  # route to display the home page
 @cross_origin()
@@ -100,7 +106,7 @@ def index():
                 
                 # process will go for sleep for 15 minutes
                 time.sleep(15)
-                
+
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
             except:
@@ -109,7 +115,6 @@ def index():
             try:    
                 allCourses = soup.find_all('div', {'class': "TopCategoryList_categories__1oxks"})
                 app.logger.info('All Courses')
-                app.logger.info(allCourses)
             except:
                 app.logger.error('Not able to locate div for course categories List')
             
