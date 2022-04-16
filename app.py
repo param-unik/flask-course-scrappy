@@ -148,19 +148,24 @@ def index():
 
                 # to scroll from 0 to end of page
                 elem = driver.find_element_by_tag_name("body")
-
+                check_height = driver.execute_script("return document.body.scrollHeight;")
                 no_of_pagedowns = 40
 
-                while no_of_pagedowns:
-                    elem.send_keys(Keys.PAGE_DOWN)
-                    time.sleep(0.2)
-                    no_of_pagedowns-=1
-
-                # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                # while no_of_pagedowns:
+                #     elem.send_keys(Keys.PAGE_DOWN)
+                #     height = driver.execute_script("return document.body.scrollHeight;")
+                #     no_of_pagedowns-=1
+                #     if height == check_height: 
+                #         break
+                check_height = driver.execute_script("return document.body.scrollHeight;") 
+                while True:
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(2)
+                    height = driver.execute_script("return document.body.scrollHeight;") 
+                    if height == check_height: 
+                        break 
+                    check_height = height
                 
-                # process will go for sleep for 15 minutes
-                # time.sleep(15)
-
                 try:
                     course_page = bs(driver.page_source, 'html.parser')
                     all_course_list = course_page.find_all('div', {'class': 'AllCourses_course-list__36-kz'})
