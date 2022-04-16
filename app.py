@@ -102,7 +102,7 @@ def index():
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 
                 # process will go for sleep for .5 seconds
-                time.sleep(.5)
+                time.sleep(.2)
 
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
@@ -160,7 +160,7 @@ def index():
                 check_height = driver.execute_script("return document.body.scrollHeight;") 
                 while True:
                     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                    time.sleep(2)
+                    time.sleep(1.5)
                     height = driver.execute_script("return document.body.scrollHeight;") 
                     if height == check_height: 
                         break 
