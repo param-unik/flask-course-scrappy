@@ -10,7 +10,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 import logging
 import pymongo
-import requests
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -209,6 +208,5 @@ def index():
 
 
 if __name__ == "__main__":
-    sess = requests.Session()
-    app.run(host='127.0.0.1', port=8001, debug=True)
+    app.run(host='0.0.0.0', port=8001, debug=False)
 
