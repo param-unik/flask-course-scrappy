@@ -1,6 +1,5 @@
 import os
 import time
-from datetime import timedelta
 from flask import Flask, render_template, request,jsonify
 from flask_cors import CORS,cross_origin
 from bs4 import BeautifulSoup as bs
@@ -8,8 +7,10 @@ from urllib.request import urlopen as uReq
 import urllib.request as urlRequest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
 import logging
 import pymongo
+import requests
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -38,7 +39,8 @@ def loadDB(courselist):
         except: 
             app.logger.info("Error inserting data to mongodb")
     except:
-        app.logger.info('error connecting to mongo db client')    
+        app.logger.info('error connecting to mongo db client')   
+
 
 @app.route('/courses', methods=['POST', 'GET'])  # route to show the review comments in a web UI
 @cross_origin()
@@ -89,7 +91,7 @@ def index():
                 coursesURL = courseExplorer[0].a['href']
                 app.logger.info(coursesURL)
             except:
-                app.loger.error("Error finding class or href of course URL")   
+                app.logger.error("Error finding class or href of course URL")   
 
             app.logger.info("Dynamic scraping starts here")
             try:
@@ -99,8 +101,8 @@ def index():
                 # to scroll from 0 to end of page
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 
-                # process will go for sleep for 15 minutes
-                time.sleep(5)
+                # process will go for sleep for .5 seconds
+                time.sleep(.5)
 
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
@@ -116,7 +118,6 @@ def index():
             try:
                 courseName = allCourses[0].find_all('p', {'class' : 'TopCategory_listname__BgEnP'})[0].text
             except:
-                app.logger.info(allCourses)
                 app.logger.error('Error getting course Name from paragraph')
 
             try:
@@ -146,10 +147,19 @@ def index():
                     app.logger.error('error getting URL extracted from anchor tag')
 
                 # to scroll from 0 to end of page
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                elem = driver.find_element_by_tag_name("body")
+
+                no_of_pagedowns = 40
+
+                while no_of_pagedowns:
+                    elem.send_keys(Keys.PAGE_DOWN)
+                    time.sleep(0.2)
+                    no_of_pagedowns-=1
+
+                # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 
                 # process will go for sleep for 15 minutes
-                time.sleep(15)
+                # time.sleep(15)
 
                 try:
                     course_page = bs(driver.page_source, 'html.parser')
@@ -195,5 +205,6 @@ def index():
 
 
 if __name__ == "__main__":
+    sess = requests.Session()
     app.run(host='127.0.0.1', port=8001, debug=True)
 
