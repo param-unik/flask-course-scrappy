@@ -102,7 +102,7 @@ def index():
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                 
                 # process will go for sleep for .5 seconds
-                time.sleep(.2)
+                time.sleep(1)
 
                 soup = bs(driver.page_source, 'html.parser')
                 app.logger.info('soup')
@@ -147,20 +147,19 @@ def index():
                     app.logger.error('error getting URL extracted from anchor tag')
 
                 # to scroll from 0 to end of page
-                elem = driver.find_element_by_tag_name("body")
-                check_height = driver.execute_script("return document.body.scrollHeight;")
-                no_of_pagedowns = 40
+                # elem = driver.find_element_by_tag_name("body")
+                # no_of_pagedowns = 40
 
                 # while no_of_pagedowns:
                 #     elem.send_keys(Keys.PAGE_DOWN)
                 #     height = driver.execute_script("return document.body.scrollHeight;")
                 #     no_of_pagedowns-=1
-                #     if height == check_height: 
-                #         break
+
+
                 check_height = driver.execute_script("return document.body.scrollHeight;") 
                 while True:
                     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                    time.sleep(1.5)
+                    time.sleep(1)
                     height = driver.execute_script("return document.body.scrollHeight;") 
                     if height == check_height: 
                         break 
